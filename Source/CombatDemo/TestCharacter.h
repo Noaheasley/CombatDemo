@@ -17,18 +17,7 @@ public:
 	// Sets default values for this character's properties
 	ATestCharacter();
 
-private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArm;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -40,10 +29,33 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void MoveRight(float AxisValue);
-protected:
-		void AttackStart();
 
-		void AttackEnd();
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+	TSubclassOf<AActor> ActorToSpawn;
+
+	
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* Camera;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "True"))
+		class UAnimMontage* MeleeAttackMontage;
+private:
+	void AttackStart();
+	void AttackEnd();
+
+	UFUNCTION()
+		void SpawnObject(FVector Lov, FRotator Rot);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+
+
 private:
 	bool IsMovingX = false;
 	bool IsMovingY = false;

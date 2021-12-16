@@ -19,6 +19,13 @@ ATestCharacter::ATestCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	//load animation montage
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> MeleeAttackMontageObject(TEXT("AnimMontage'/Game/Character/Animation/Attack.Attack'"));
+	if (MeleeAttackMontageObject.Succeeded())
+	{
+		MeleeAttackMontage = MeleeAttackMontageObject.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -50,9 +57,9 @@ void ATestCharacter::MoveForward(float AxisValue)
 	FRotator rotator = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
 	FVector forward = rotator.Vector();
 	AddMovementInput(forward, AxisValue);
-
+	
 	IsMovingX = AxisValue != 0.0f;
-	bUseControllerRotationYaw = IsMovingX || IsMovingY;
+	bUseControllerRotationYaw = false;
 }
 
 void ATestCharacter::MoveRight(float AxisValue)
@@ -62,16 +69,28 @@ void ATestCharacter::MoveRight(float AxisValue)
 	AddMovementInput(right, AxisValue);
 
 	IsMovingY = AxisValue != 0.0f;
-	bUseControllerRotationYaw = IsMovingX || IsMovingY;
+	bUseControllerRotationYaw = false;
 }
 
 void ATestCharacter::AttackStart()
 {
+	FVector Loc;
+	FRotator Rot;
+	FRotator rotator = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
+	FVector forward = rotator.Vector();
+	SpawnObject(forward, Rot);
+	PlayAnimMontage(MeleeAttackMontage, 1.f, FName("start_1"));
 }
 
 void ATestCharacter::AttackEnd()
 {
 
+}
+
+void ATestCharacter::SpawnObject(FVector Loc, FRotator Rot)
+{
+	FActorSpawnParameters SpawnParams;
+	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, Loc, Rot, SpawnParams);
 }
 
 
