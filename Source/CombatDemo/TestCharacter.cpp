@@ -20,6 +20,9 @@ ATestCharacter::ATestCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	HitBox = CreateDefaultSubobject<UActorComponent>(TEXT("HitBox"));
+	HitBox = RootComponent;
+
 	//load animation montage
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> MeleeAttackMontageObject(TEXT("AnimMontage'/Game/Character/Animation/Attack.Attack'"));
 	if (MeleeAttackMontageObject.Succeeded())
@@ -74,11 +77,8 @@ void ATestCharacter::MoveRight(float AxisValue)
 
 void ATestCharacter::AttackStart()
 {
-	FVector Loc;
-	FRotator Rot;
-	FRotator rotator = FRotator(0.0f, GetControlRotation().Yaw, 0.0f);
-	FVector forward = rotator.Vector();
-	SpawnObject(forward, Rot);
+	
+	//SpawnObject(forward, rotator);
 	PlayAnimMontage(MeleeAttackMontage, 1.f, FName("start_1"));
 }
 
