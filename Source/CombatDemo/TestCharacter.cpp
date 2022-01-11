@@ -20,8 +20,11 @@ ATestCharacter::ATestCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	CollectionRange = CreateDefaultSubobject<USphereComponent>(TEXT("CollectionRange"));
+	CollectionRange->AttachTo(RootComponent);
+	CollectionRange->SetSphereRadius(100.0f);
+
 	HitBox = CreateDefaultSubobject<UActorComponent>(TEXT("HitBox"));
-	HitBox = RootComponent;
 
 	//load animation montage
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> MeleeAttackMontageObject(TEXT("AnimMontage'/Game/Character/Animation/Attack.Attack'"));
@@ -36,6 +39,10 @@ void ATestCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (Wielded)
+	{
+		Wielded->GetOwner()->SetActorHiddenInGame(true);
+	}
 }
 
 // Called every frame
@@ -50,9 +57,8 @@ void ATestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	//attck
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATestCharacter::AttackStart);
-	PlayerInputComponent->BindAction("Attack", IE_Released, this, &ATestCharacter::AttackEnd);
+	PlayerInputComponent->BindAction("Pickup", IE_Pressed, this, &ATestCharacter::Interact);
 }
 
 void ATestCharacter::MoveForward(float AxisValue)
@@ -77,20 +83,38 @@ void ATestCharacter::MoveRight(float AxisValue)
 
 void ATestCharacter::AttackStart()
 {
+	FRotator rotation = HitBox->GetOwner()->GetActorRotation();
+	FVector location = HitBox->GetOwner()->GetActorLocation();
+
 	
-	//SpawnObject(forward, rotator);
+	SpawnObject(location, rotation);
 	PlayAnimMontage(MeleeAttackMontage, 1.f, FName("start_1"));
 }
 
-void ATestCharacter::AttackEnd()
+void ATestCharacter::Interact()
 {
+	TArray<AActor*> inRangeItems;
+	CollectionRange->GetOverlappingActors(inRangeItems);
 
+	for (int i = 0; i < inRangeItems.Num(); i++)
+	{
+		AWeaponPickup* const testItem = Cast<AWeaponPickup>(inRangeItems[i]);
+		if (testItem && !testItem->IsPendingKill() && testItem->GetActive())
+		{
+			testItem->Interacted();
+			if (Wielded)
+			{
+				Wielded->GetOwner()->SetActorHiddenInGame(false);
+			}
+		}
+	}
 }
+
 
 void ATestCharacter::SpawnObject(FVector Loc, FRotator Rot)
 {
 	FActorSpawnParameters SpawnParams;
-	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, Loc, Rot, SpawnParams);
+	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(HitboxSpawn, Loc, Rot, SpawnParams);
 }
 
 

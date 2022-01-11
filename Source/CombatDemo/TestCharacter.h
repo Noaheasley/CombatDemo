@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/SphereComponent.h"
+#include "Animation/SkeletalMeshActor.h"
+#include "WeaponPickup.h"
 #include "TestCharacter.generated.h"
 
 UCLASS()
@@ -31,7 +34,7 @@ public:
 		void MoveRight(float AxisValue);
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
-	TSubclassOf<AActor> ActorToSpawn;
+	TSubclassOf<AActor> HitboxSpawn;
 
 	
 private:
@@ -48,7 +51,14 @@ private:
 		class UAnimMontage* MeleeAttackMontage;
 private:
 	void AttackStart();
-	void AttackEnd();
+
+	void Interact();
+
+	UPROPERTY(EditAnywhere, Category = "Pickup", meta = (AllowPrivateAccess = true))
+		USphereComponent* CollectionRange;
+
+	UPROPERTY(EditAnywhere, Category = "Pickup")
+		UActorComponent* Wielded;
 
 	UFUNCTION()
 		void SpawnObject(FVector Lov, FRotator Rot);
