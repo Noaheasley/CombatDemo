@@ -33,9 +33,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void MoveRight(float AxisValue);
 
+public:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> HitboxSpawn;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	FVector WeaponOffset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	FVector WeaponHitboxSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float WeaponHitboxRotation;
 	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -45,7 +54,7 @@ private:
 	UCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UActorComponent* HitBox;
+		class UActorComponent* Hitbox;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "True"))
 		class UAnimMontage* MeleeAttackMontage;

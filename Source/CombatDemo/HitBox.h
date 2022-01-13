@@ -6,14 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "HitBox.generated.h"
 
-UENUM(BlueprintType)
-enum class EHitboxEnum : uint8
-{
-	HB_PROXIMITY	UMETA(DisplayName = "Proximity"),
-	HB_STRIKE		UMETA(DisplayName = "Strike"),
-	HB_HURTBOX		UMETA(DisplayName = "Hurtbox")
-};
-
 UCLASS()
 class COMBATDEMO_API AHitBox : public AActor
 {
@@ -23,6 +15,11 @@ public:
 	// Sets default values for this actor's properties
 	AHitBox();
 
+	UPROPERTY(VisibleDefaultsOnly, Category = "HitBox")
+	UStaticMeshComponent* TestMeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KillTime")
+		float Killtime = 0.5f;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,5 +27,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+
 
 };

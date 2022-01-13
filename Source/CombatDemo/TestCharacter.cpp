@@ -24,8 +24,7 @@ ATestCharacter::ATestCharacter()
 	CollectionRange->AttachTo(RootComponent);
 	CollectionRange->SetSphereRadius(100.0f);
 
-	HitBox = CreateDefaultSubobject<UActorComponent>(TEXT("HitBox"));
-
+	Hitbox = CreateDefaultSubobject<UActorComponent>(TEXT("HitBox"));
 	//load animation montage
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> MeleeAttackMontageObject(TEXT("AnimMontage'/Game/Character/Animation/Attack.Attack'"));
 	if (MeleeAttackMontageObject.Succeeded())
@@ -83,12 +82,15 @@ void ATestCharacter::MoveRight(float AxisValue)
 
 void ATestCharacter::AttackStart()
 {
-	FRotator rotation = HitBox->GetOwner()->GetActorRotation();
-	FVector location = HitBox->GetOwner()->GetActorLocation();
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	FRotator rotation = Hitbox->GetOwner()->GetActorRotation();
+	WeaponOffset.Set(100.0f, 0.0f, 0.0f);
+	FVector forward = Hitbox->GetOwner()->GetActorLocation() + FTransform(rotation).TransformVector(WeaponOffset);
 
 	
-	SpawnObject(location, rotation);
+	SpawnObject(forward, rotation);
 	PlayAnimMontage(MeleeAttackMontage, 1.f, FName("start_1"));
+	DisableInput(PlayerController);
 }
 
 void ATestCharacter::Interact()
@@ -115,6 +117,9 @@ void ATestCharacter::SpawnObject(FVector Loc, FRotator Rot)
 {
 	FActorSpawnParameters SpawnParams;
 	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(HitboxSpawn, Loc, Rot, SpawnParams);
+	FRotator SpawnedActorRotation = FRotator(0.f, Rot.Yaw, 45.f);
+	SpawnedActorRef->SetActorScale3D(WeaponHitboxSize);
+	SpawnedActorRef->SetActorRotation(SpawnedActorRotation);
 }
 
 
