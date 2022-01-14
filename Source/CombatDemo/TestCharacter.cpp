@@ -90,7 +90,6 @@ void ATestCharacter::AttackStart()
 	
 	SpawnObject(forward, rotation);
 	PlayAnimMontage(MeleeAttackMontage, 1.f, FName("start_1"));
-	DisableInput(PlayerController);
 }
 
 void ATestCharacter::Interact()
@@ -117,7 +116,14 @@ void ATestCharacter::SpawnObject(FVector Loc, FRotator Rot)
 {
 	FActorSpawnParameters SpawnParams;
 	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(HitboxSpawn, Loc, Rot, SpawnParams);
-	FRotator SpawnedActorRotation = FRotator(0.f, Rot.Yaw, 45.f);
+	WeaponHitboxRotation = WeaponRotationArray[IndexLimit];
+	FRotator SpawnedActorRotation = { FRotator(0.f, Rot.Yaw, WeaponHitboxRotation) };
+
+	WeaponHitboxSize = WeaponSizeArray[IndexLimit];
+	UE_LOG(LogTemp, Warning, TEXT("The integer value is: %d"), IndexLimit);
+	++IndexLimit;
+	if (IndexLimit == WeaponRotationArray.Num())
+		IndexLimit = 0;
 	SpawnedActorRef->SetActorScale3D(WeaponHitboxSize);
 	SpawnedActorRef->SetActorRotation(SpawnedActorRotation);
 }

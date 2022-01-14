@@ -34,18 +34,24 @@ public:
 		void MoveRight(float AxisValue);
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		TArray<float> WeaponRotationArray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		TArray<FVector> WeaponSizeArray;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> HitboxSpawn;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FVector WeaponOffset;
 
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	FVector WeaponHitboxSize;
+		FVector WeaponHitboxSize;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	float WeaponHitboxRotation;
-	
+		float WeaponHitboxRotation;
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm;
@@ -58,6 +64,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "True"))
 		class UAnimMontage* MeleeAttackMontage;
+
+	int IndexLimit = 0;
 private:
 	void AttackStart();
 
@@ -68,6 +76,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Pickup")
 		UActorComponent* Wielded;
+
+
 
 	UFUNCTION()
 		void SpawnObject(FVector Lov, FRotator Rot);
