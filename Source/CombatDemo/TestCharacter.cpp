@@ -37,7 +37,6 @@ ATestCharacter::ATestCharacter()
 void ATestCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	if (Wielded)
 	{
 		Wielded->GetOwner()->SetActorHiddenInGame(true);
@@ -48,7 +47,6 @@ void ATestCharacter::BeginPlay()
 void ATestCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -86,9 +84,11 @@ void ATestCharacter::AttackStart()
 	FRotator rotation = Hitbox->GetOwner()->GetActorRotation();
 	WeaponOffset.Set(100.0f, 0.0f, 0.0f);
 	FVector forward = Hitbox->GetOwner()->GetActorLocation() + FTransform(rotation).TransformVector(WeaponOffset);
-
+	DisableInput(PlayerController);
 	
 	SpawnObject(forward, rotation);
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ATestCharacter::AttackCoolDown, 1.0f, true, AttackTime);
+
 	PlayAnimMontage(MeleeAttackMontage, 1.f, FName("start_1"));
 }
 
@@ -111,6 +111,16 @@ void ATestCharacter::Interact()
 	}
 }
 
+void ATestCharacter::AttackCoolDown()
+{
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (GetWorldTimerManager().GetTimerRemaining(AttackTimerHandle) <= 0)
+	{
+		EnableInput(PlayerController);
+		GetWorldTimerManager().ClearTimer(AttackTimerHandle);
+	}
+}
+
 
 void ATestCharacter::SpawnObject(FVector Loc, FRotator Rot)
 {
@@ -120,12 +130,12 @@ void ATestCharacter::SpawnObject(FVector Loc, FRotator Rot)
 	FRotator SpawnedActorRotation = { FRotator(0.f, Rot.Yaw, WeaponHitboxRotation) };
 
 	WeaponHitboxSize = WeaponSizeArray[IndexLimit];
-	UE_LOG(LogTemp, Warning, TEXT("The integer value is: %d"), IndexLimit);
 	++IndexLimit;
-	if (IndexLimit == WeaponRotationArray.Num())
+	if (IndexLimit == WeaponRotationArray.Num() || IndexLimit == WeaponSizeArray.Num())
 		IndexLimit = 0;
 	SpawnedActorRef->SetActorScale3D(WeaponHitboxSize);
 	SpawnedActorRef->SetActorRotation(SpawnedActorRotation);
+	MeleeHitbox = SpawnedActorRef;
 }
 
 

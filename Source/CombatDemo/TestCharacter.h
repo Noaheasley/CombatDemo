@@ -9,7 +9,9 @@
 #include "Components/SphereComponent.h"
 #include "Animation/SkeletalMeshActor.h"
 #include "WeaponPickup.h"
+#include "HitBox.h"
 #include "TestCharacter.generated.h"
+
 
 UCLASS()
 class COMBATDEMO_API ATestCharacter : public ACharacter
@@ -35,23 +37,28 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		TArray<float> WeaponRotationArray;
+	TArray<float> WeaponRotationArray;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		TArray<FVector> WeaponSizeArray;
+	TArray<FVector> WeaponSizeArray;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<AActor> HitboxSpawn;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+	AActor* MeleeHitbox;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FVector WeaponOffset;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float AttackTime = 0;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		FVector WeaponHitboxSize;
+	FVector WeaponHitboxSize;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		float WeaponHitboxRotation;
+	float WeaponHitboxRotation;
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArm;
@@ -60,16 +67,25 @@ private:
 	UCameraComponent* Camera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UActorComponent* Hitbox;
+	class UActorComponent* Hitbox;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "True"))
-		class UAnimMontage* MeleeAttackMontage;
+	class UAnimMontage* MeleeAttackMontage;
 
 	int IndexLimit = 0;
+
+
+	bool isAttcking = false;
+	FTimerHandle AttackTimerHandle;
+
+	
+
 private:
 	void AttackStart();
 
 	void Interact();
+
+	void AttackCoolDown();
 
 	UPROPERTY(EditAnywhere, Category = "Pickup", meta = (AllowPrivateAccess = true))
 		USphereComponent* CollectionRange;

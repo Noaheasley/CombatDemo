@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MyCharacter.generated.h"
+#include "TestDummy.generated.h"
 
 UCLASS()
-class COMBATDEMO_API AMyCharacter : public ACharacter
+class COMBATDEMO_API ATestDummy : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AMyCharacter();
+	ATestDummy();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,7 +23,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		float health = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		AActor* DamageHitBox;
+
+private:
+	float defualtHealth;
 };
