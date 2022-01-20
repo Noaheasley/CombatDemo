@@ -96,7 +96,6 @@ void ATestCharacter::Interact()
 {
 	TArray<AActor*> inRangeItems;
 	CollectionRange->GetOverlappingActors(inRangeItems);
-
 	for (int i = 0; i < inRangeItems.Num(); i++)
 	{
 		AWeaponPickup* const testItem = Cast<AWeaponPickup>(inRangeItems[i]);

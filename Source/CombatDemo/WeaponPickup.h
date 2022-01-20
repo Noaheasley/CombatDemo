@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Hitbox.h"
 #include "WeaponPickup.generated.h"
 
 UCLASS()
@@ -26,9 +27,16 @@ public:
 	void Interacted();
 	bool GetActive();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DamageMod")
+		float DamageMod = 0.5;
+
+	UFUNCTION()
+		float IncreaseDamage(float Damage);
 private:
 	UPROPERTY()
 		bool active;
+
+	class AHitBox* WeaponHitboxRef;
 
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 		class UStaticMeshComponent* mesh;

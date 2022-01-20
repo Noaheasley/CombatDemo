@@ -53,6 +53,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float AttackTime = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float Damage = 0;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FVector WeaponHitboxSize;
@@ -74,6 +78,8 @@ private:
 
 	int IndexLimit = 0;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		class AHitbox* WeaponHitbox;
 
 	bool isAttcking = false;
 	FTimerHandle AttackTimerHandle;

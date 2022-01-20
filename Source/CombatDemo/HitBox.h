@@ -20,14 +20,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KillTime")
 		float Killtime = 0.5f;
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
-public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		float Damage = 0.5f;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 };

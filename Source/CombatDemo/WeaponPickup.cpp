@@ -31,6 +31,7 @@ void AWeaponPickup::Tick(float DeltaTime)
 
 void AWeaponPickup::Interacted()
 {
+
 	active = false;
 	Destroy(true);
 }
@@ -38,5 +39,10 @@ void AWeaponPickup::Interacted()
 bool AWeaponPickup::GetActive()
 {
 	return active;
+}
+
+float AWeaponPickup::IncreaseDamage(float Damage)
+{
+	return Damage += DamageMod;
 }
 
