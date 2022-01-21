@@ -14,16 +14,15 @@ class COMBATDEMO_API AHitBox : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AHitBox();
-
+	//mesh of the hitbox
 	UPROPERTY(VisibleDefaultsOnly, Category = "HitBox")
 	UStaticMeshComponent* TestMeshComponent;
-
+	//Time it takes till the Hitbox is destroyed
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KillTime")
 		float Killtime = 0.5f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	//ammount of damage the hitbox deals
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KillTime")
 		float Damage = 0.5f;
-
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

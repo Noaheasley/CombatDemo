@@ -14,9 +14,11 @@ AHitBox::AHitBox()
 		static ConstructorHelpers::FObjectFinder<UStaticMesh>Mesh(TEXT("StaticMesh'/Engine/BasicShapes/Cube1.Cube1'"));
 		if (Mesh.Succeeded())
 		{
+			//sets the mesh to the actor
 			TestMeshComponent->SetStaticMesh(Mesh.Object);
 		}
 	}
+	//sets the lifespan to be the killtime
 	InitialLifeSpan = Killtime;
 }
 
@@ -24,6 +26,7 @@ AHitBox::AHitBox()
 void AHitBox::BeginPlay()
 {
 	Super::BeginPlay();
+	//sets the lifetime
 	SetLifeSpan(Killtime);
 }
 

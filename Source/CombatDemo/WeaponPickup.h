@@ -23,21 +23,21 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	//what happens when the item is interacted
 	void Interacted();
+
 	bool GetActive();
-
+	//modifier for the damage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DamageMod")
-		float DamageMod = 0.5;
-
+		float DamageMod = 0.25;
+	//function to increase damage
 	UFUNCTION()
 		float IncreaseDamage(float Damage);
 private:
+	//see if the actor is active or not
 	UPROPERTY()
 		bool active;
-
-	class AHitBox* WeaponHitboxRef;
-
+	//reference for the mesh
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 		class UStaticMeshComponent* mesh;
 

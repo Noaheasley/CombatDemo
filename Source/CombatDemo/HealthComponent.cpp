@@ -18,19 +18,26 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//gets the owner of the health component
 	AActor* Owner = GetOwner();
 	if (Owner)
 	{
+		//deals damage to the actor
 		Owner->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
 	}
 }
 
 void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
+	//ignores if the damage is less than or equal to 0
 	if (Damage <= 0)
 		return;
-
+	//clamps the health
 	DefaultHealth = FMath::Clamp(DefaultHealth - Damage, 0.0f, DefaultHealth);
+	//checks if the health gets lower than 0
+	if (DefaultHealth <= 0)
+	{
+		DefaultHealth = 0;
+	}
 }
 

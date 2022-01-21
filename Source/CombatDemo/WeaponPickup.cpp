@@ -10,8 +10,9 @@ AWeaponPickup::AWeaponPickup()
 	PrimaryActorTick.bCanEverTick = true;
 
 	active = true;
-
+	//sets the mesh
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	//sets the mesh to the root
 	RootComponent = mesh;
 }
 
@@ -31,7 +32,7 @@ void AWeaponPickup::Tick(float DeltaTime)
 
 void AWeaponPickup::Interacted()
 {
-
+	//deactivates and destroies the object
 	active = false;
 	Destroy(true);
 }
@@ -43,6 +44,8 @@ bool AWeaponPickup::GetActive()
 
 float AWeaponPickup::IncreaseDamage(float Damage)
 {
-	return Damage += DamageMod;
+	//increases damage
+	Damage += DamageMod;
+	return Damage;
 }
 
